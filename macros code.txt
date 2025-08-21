@@ -1,0 +1,43 @@
+Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
+    Dim rngTop As Range, rngBottom As Range
+
+    ' Replace these with your actual gray ranges
+    Set rngTop = Me.Range("B6:H18")       ' ← top gray area
+    Set rngBottom = Me.Range("B23:H34")   ' ← bottom gray area
+
+    If Not Intersect(Target, rngTop) Is Nothing Then
+        Cancel = True: InsertPictureIntoArea rngTop: Exit Sub
+    End If
+    If Not Intersect(Target, rngBottom) Is Nothing Then
+        Cancel = True: InsertPictureIntoArea rngBottom
+    End If
+End Sub
+
+
+
+------------------------
+for the ALT+F11
+
+Public Sub InsertPictureIntoArea(ByVal area As Range)
+    Dim fp As Variant, s As Shape, shp As Shape
+    fp = Application.GetOpenFilename( _
+        "Image Files (*.jpg;*.jpeg;*.png;*.bmp;*.gif),*.jpg;*.jpeg;*.png;*.bmp;*.gif", , _
+        "画像を選択")
+    If fp = False Then Exit Sub
+
+    ' delete any picture overlapping the area
+    For Each s In area.Parent.Shapes
+        If s.Type = msoPicture Then
+            If Not (s.Left > area.Left + area.Width _
+                Or s.Left + s.Width < area.Left _
+                Or s.Top > area.Top + area.Height _
+                Or s.Top + s.Height < area.Top) Then s.Delete
+        End If
+    Next s
+
+    ' insert new picture to exactly fill the area
+    Set shp = area.Parent.Shapes.AddPicture(CStr(fp), msoFalse, msoTrue, _
+                                            area.Left, area.Top, area.Width, area.Height)
+    shp.LockAspectRatio = msoFalse
+    shp.Line.Visible = msoFalse
+End Sub
