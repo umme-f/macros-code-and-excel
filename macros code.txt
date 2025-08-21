@@ -1,9 +1,12 @@
+----------------------------------------------------------------------------
+right click the sheet name and select "code..." and paste this code snippet
+----------------------------------------------------------------------------
 Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
     Dim rngTop As Range, rngBottom As Range
 
     ' Replace these with your actual gray ranges
-    Set rngTop = Me.Range("B6:H18")       ' ← top gray area
-    Set rngBottom = Me.Range("B23:H34")   ' ← bottom gray area
+    Set rngTop = Me.Range("B6:H18")       ' ← top gray area; change the cell range as per the requirements
+    Set rngBottom = Me.Range("B23:H34")   ' ← bottom gray area; change the cell range as per the requirements
 
     If Not Intersect(Target, rngTop) Is Nothing Then
         Cancel = True: InsertPictureIntoArea rngTop: Exit Sub
@@ -15,9 +18,9 @@ End Sub
 
 
 
-------------------------
-for the ALT+F11
-
+-------------------------------------------------------------
+for the ALT+F11: paste this snippet in the Macros code editor
+-------------------------------------------------------------
 Public Sub InsertPictureIntoArea(ByVal area As Range)
     Dim fp As Variant, s As Shape, shp As Shape
     fp = Application.GetOpenFilename( _
